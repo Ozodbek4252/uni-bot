@@ -16,6 +16,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/.bot-database
-.bot-database
+/bot-database
+bot-database
 

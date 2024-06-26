@@ -36,7 +36,7 @@ class RequestController extends Controller
         if ($theme) {
             $send_message .= "📦 Тема: {$theme}\n";
         }
-        $send_message .= "IP: {$ip}\n⏰ Время заказа: {$time}";
+        $send_message .= "⏰ Время заказа: {$time}";
 
         $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
         Http::post($url, [
