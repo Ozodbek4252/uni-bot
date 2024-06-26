@@ -10,8 +10,14 @@ class RequestController extends Controller
 {
     public function requestToBot(Request $request)
     {
-        $botToken = config('bot.jom-marble.TG_BOT_TOKEN');
-        $chatId = config('bot.jom-marble.TG_CHAT_ID');
+        if (!$request->project) {
+            return response()->json(['error' => 'Project is required'], 400);
+        }
+
+        $project_name = strtoupper($request->project);
+
+        $botToken = env($project_name . '_TG_BOT_TOKEN');
+        $chatId = env($project_name . '_TG_CHAT_ID');
 
         $name = $request->input('name');
         $phone = $request->input('phone');
