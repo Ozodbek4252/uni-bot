@@ -22,6 +22,7 @@ class RequestController extends Controller
         $name = $request->input('name');
         $phone = $request->input('phone');
         $message = $request->input('message');
+        $theme = $request->input('theme');
         $ip = $request->ip();
         $time = now()->format('d.m.Y - H:i');
 
@@ -31,6 +32,9 @@ class RequestController extends Controller
         }
         if ($message) {
             $send_message .= "📝 Сообщение: {$message}\n";
+        }
+        if ($theme) {
+            $send_message .= "📦 Тема: {$theme}\n";
         }
         $send_message .= "IP: {$ip}\n⏰ Время заказа: {$time}";
 
