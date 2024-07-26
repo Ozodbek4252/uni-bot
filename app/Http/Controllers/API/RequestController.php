@@ -16,6 +16,14 @@ class RequestController extends Controller
 
         $project_name = strtoupper($request->project);
 
+        if ($project_name == 'JOM_MARBLE') {
+            $project_name = 'JOM_MARBLE';
+        } elseif ($project_name == 'NASOS') {
+            $project_name = 'NASOS';
+        } else {
+            return response()->json(['error' => 'Project not found'], 404);
+        }
+
         $botToken = env($project_name . '_TG_BOT_TOKEN');
         $chatId = env($project_name . '_TG_CHAT_ID');
 
@@ -23,7 +31,6 @@ class RequestController extends Controller
         $phone = $request->input('phone');
         $message = $request->input('message');
         $theme = $request->input('theme');
-        $ip = $request->ip();
         $time = now()->format('d.m.Y - H:i');
 
         $send_message = "📞 Телефон: {$phone}\n";
