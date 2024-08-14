@@ -56,7 +56,6 @@ class IgsBotService implements BotServiceInterface
         $type = $data['type'] ?? null;
         $phone = $data['phone'] ?? null;
         $name = $data['name'] ?? null;
-        $time = now()->format('d.m.Y - H:i');
 
         $message = $this->getMessageTypeHeader($type);
 
@@ -67,7 +66,6 @@ class IgsBotService implements BotServiceInterface
         }
 
         $message .= $this->getAdditionalMessageContent($data, $type);
-        $message .= "⏰ Время: {$time}";
 
         return $message;
     }
