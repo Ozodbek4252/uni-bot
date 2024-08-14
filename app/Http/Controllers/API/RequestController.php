@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
+use App\Services\BotServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class RequestController extends Controller
 {
@@ -16,39 +17,18 @@ class RequestController extends Controller
 
         $project_name = strtoupper($request->project);
 
-        if ($project_name == 'JOM_MARBLE') {
-            $project_name = 'JOM_MARBLE';
-        } elseif ($project_name == 'NASOS') {
-            $project_name = 'NASOS';
-        } else {
+        $projects = getProjectsJson()['project_list'];
+
+        if (!in_array($project_name, $projects)) {
             return response()->json(['error' => 'Project not found'], 404);
         }
 
-        $botToken = env($project_name . '_TG_BOT_TOKEN');
-        $chatId = env($project_name . '_TG_CHAT_ID');
+        // Fetch the bot service using the project name
+        $botService = App::make(BotServiceInterface::class, [$project_name]);
 
-        $name = $request->input('name');
-        $phone = $request->input('phone');
-        $message = $request->input('message');
-        $theme = $request->input('theme');
-        $time = now()->format('d.m.Y - H:i');
+        // Send message
+        $botService->sendMessage($request->all());
 
-        $send_message = "📞 Телефон: {$phone}\n";
-        if ($name) {
-            $send_message .= "👨‍💻 Имя: {$name}\n";
-        }
-        if ($message) {
-            $send_message .= "📝 Сообщение: {$message}\n";
-        }
-        if ($theme) {
-            $send_message .= "📦 Тема: {$theme}\n";
-        }
-        $send_message .= "⏰ Время заказа: {$time}";
-
-        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
-        Http::post($url, [
-            'chat_id' => $chatId,
-            'text' => $send_message,
-        ]);
+        return response()->json(['success' => 'Message sent']);
     }
 }

@@ -21,3 +21,10 @@ GET http://localhost:9005/api/request-to-bot?project=jom-marble&phone=+998944424
 -   **phone**: The phone number to be included in the request (required).
 -   **name**: The name of the person (optional).
 -   **message**: A message to be sent (optional).
+
+
+
+## To add new project bot
+1. Add bot_token and chat_id to projects.json
+2. Add switch case for BotServiceProvider
+3. Create Service for that project

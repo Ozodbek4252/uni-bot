@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/request-to-bot', [RequestController::class, 'requestToBot']);
+Route::post('/request-to-bot', [RequestController::class, 'requestToBot']);
