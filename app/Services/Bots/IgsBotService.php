@@ -105,6 +105,8 @@ class IgsBotService implements BotServiceInterface
             $content .= $this->formatVacancyContent($data);
         } elseif ($type === 'admission') {
             $content .= $this->formatAdmissionContent($data);
+        } elseif ($type === 'tour') {
+            $content .= $this->formatTourContent($data);
         }
 
         return $content;
@@ -161,6 +163,24 @@ class IgsBotService implements BotServiceInterface
         }
         if ($grade) {
             $content .= "👨‍🎓 Описание: {$grade}\n";
+        }
+
+        return $content;
+    }
+
+    /**
+     * Formats additional content for tour type messages.
+     *
+     * @param array $data Message data.
+     * @return string
+     */
+    private function formatTourContent(array $data): string
+    {
+        $content = "";
+        $date = $data['date'] ?? null;
+
+        if ($date) {
+            $content .= "📅 Дата: {$date}\n";
         }
 
         return $content;
