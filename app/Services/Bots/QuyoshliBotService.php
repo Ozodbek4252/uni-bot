@@ -23,6 +23,7 @@ class QuyoshliBotService implements BotServiceInterface
         $delivery_type = $data['delivery_type'] ?? null;
         $summa = $data['summa'] ?? null;
         $time = now()->format('d.m.Y - H:i');
+        $group_id = $data['group_id'] ?? null;
 
         $sendMessage = "📬 Номер заказа: {$order_id}\n";
         if ($client_type) {
@@ -37,11 +38,15 @@ class QuyoshliBotService implements BotServiceInterface
         }
         $sendMessage .= "📆 Дата заказа: {$time}";
 
+        if ($group_id) {
+            $this->chatId = $group_id;
+        }
+
         $url = "https://api.telegram.org/bot{$this->botToken}/sendMessage";
 
         Http::post($url, [
             'chat_id' => $this->chatId,
             'text' => $sendMessage,
-    ]);
+        ]);
     }
 }
