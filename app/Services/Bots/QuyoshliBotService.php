@@ -22,7 +22,7 @@ class QuyoshliBotService implements BotServiceInterface
         $client_type = $data['client_type'] ?? null;
         $delivery_type = $data['delivery_type'] ?? null;
         $summa = $data['summa'] ?? null;
-        $time = now()->format('d.m.Y - H:i');
+        $time = now()->timezone('Asia/Tashkent')->format('Y-m-d H:i:s');
         $group_id = $data['group_id'] ?? null;
 
         $sendMessage = "📬 Номер заказа: {$order_id}\n";
