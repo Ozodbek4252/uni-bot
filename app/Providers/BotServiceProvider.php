@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Bots\JomMarbleBotService;
 use App\Services\Bots\NasosBotService;
 use App\Services\Bots\IgsBotService;
+use App\Services\Bots\QuyoshliBotService;
 use App\Services\BotServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +32,8 @@ class BotServiceProvider extends ServiceProvider
                     return new NasosBotService($botToken, $chatId);
                 case 'IGS':
                     return new IgsBotService($botToken, $chatId);
+                case 'QUYOSHLI':
+                    return new QuyoshliBotService($botToken, $chatId);
                 default:
                     throw new \InvalidArgumentException("No service found for project {$project_name}");
             }
