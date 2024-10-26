@@ -21,32 +21,111 @@ class QuyoshliBotService implements BotServiceInterface
         $order_id = $data['order_id'] ?? null;
         $client_type = $data['client_type'] ?? null;
         $delivery_type = $data['delivery_type'] ?? null;
-        $summa = $data['summa'] ?? null;
-        $time = now()->timezone('Asia/Tashkent')->format('Y-m-d H:i:s');
         $group_id = $data['group_id'] ?? null;
+        $message = $data['message'] ?? null;
+        $order_url = $data['order_url'] ?? null;
+        $client = $data['client'] ?? null;
+        $phone = $data['phone'] ?? null;
+        $order_number = $data['order_number'] ?? null;
+        $products = $data['products'] ?? null;
+        $address = $data['address'] ?? null;
+        $file = $data['file'] ?? null;
+        $payment_type = $data['payment_type'] ?? null;
+        $time = now()->timezone('Asia/Tashkent')->format('Y-m-d H:i:s');
 
-        $sendMessage = "📬 Номер заказа: {$order_id}\n";
+        //! Habar matni:
+        //! To'liq ma'lumot: URL
+        //! Buyurtmachi: Palonchiyev Pistonchi (Yuridik shaxs)
+        //! Telefon raqam: +998 99 XXX XX XX
+        //! Buyurtma raqami: XXXXXX
+        //! Buyurtma mahsulotlar va ularning narxlari:
+        //! Mahsulot 1 - 15 000 000 so'm
+        //! Mahsulot 2 - 30 000 000 so'm
+
+        // validation for file if exists
+        if ($file) {
+            if (!file_exists($file)) {
+                return response()->json(['error' => 'File not found'], 404);
+            }
+        }
+
+        //! Yetkazib berishi turi:
+        //! Manzil: Palonchi viloyat, Palonchi tuman , adress va uy raqami
+
+        $sendMessage = "🆔 Номер заказа: {$order_id}\n";
+
+        if ($message) {
+            $sendMessage .= "📝 Habar matni: {$message}\n";
+        }
+
+        if ($order_url) {
+            $sendMessage .= "🔗 To'liq ma'lumot: {$order_url}\n";
+        }
+
+        if ($client) {
+            $sendMessage .= "👤 Buyurtmachi: {$client}\n";
+        }
+
+        if ($phone) {
+            $sendMessage .= "📞 Telefon raqam: {$phone}\n";
+        }
+
+        if ($order_number) {
+            $sendMessage .= "📬 Buyurtma raqami: {$order_number}\n";
+        }
+
+        if ($products) {
+            // check if products is array
+            if (is_array($products)) {
+                $summa = 0;
+                $sendMessage .= "💵 Buyurtma mahsulotlar va ularning narxlari: \n";
+                foreach ($products as $product) {
+                    if (isset($product['name']) && isset($product['price']) && isset($product['count'])) {
+                        $sendMessage .= "📦 Mahsulot: {$product['name']} - {$product['price']} so'm - {$product['count']} ta\n";
+                    }
+                    $summa += $product['price'] * $product['count'];
+                }
+                $summa = number_format($summa, 0, '.', ' ');
+                $sendMessage .= "💰 Summa: {$summa} so'm\n";
+            }
+        }
+
+        if ($delivery_type) {
+            $sendMessage .= "🚚 Yetkazib berishi turi: {$delivery_type}\n";
+        }
+
         if ($client_type) {
             $sendMessage .= "💼 Тип клиента: {$client_type}\n";
         }
-        if ($delivery_type) {
-            $sendMessage .= "🚗 Тип доставки: {$delivery_type}\n";
+
+        if ($address) {
+            $sendMessage .= "🌐 Manzil: {$address}\n";
         }
-        if ($summa) {
-            $summa = number_format($summa, 0, '.', ' ');
-            $sendMessage .= "💰 Сумма заказа: {$summa} сум\n";
+
+        if ($payment_type) {
+            $sendMessage .= "💳 To'lov turi: {$payment_type}\n";
         }
-        $sendMessage .= "📆 Дата заказа: {$time}";
+
+        $sendMessage .= "📆 Buyurtma sanasi: {$time}";
 
         if ($group_id) {
             $this->chatId = $group_id;
         }
 
-        $url = "https://api.telegram.org/bot{$this->botToken}/sendMessage";
+        $url = "https://api.telegram.org/bot{$this->botToken}/" . ($file ? 'sendDocument' : 'sendMessage');
 
-        Http::post($url, [
-            'chat_id' => $this->chatId,
-            'text' => $sendMessage,
-        ]);
+        if ($file) {
+            $filename = 'file.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+
+            Http::attach('document', $file, $filename)->post($url, [
+                'chat_id' => $this->chatId,
+                'caption' => $sendMessage,
+            ]);
+        } else {
+            Http::post($url, [
+                'chat_id' => $this->chatId,
+                'text' => $sendMessage,
+            ]);
+        }
     }
 }
