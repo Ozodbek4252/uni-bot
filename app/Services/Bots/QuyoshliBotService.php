@@ -61,8 +61,8 @@ class QuyoshliBotService implements BotServiceInterface
             $sendMessage .= "🔗 To'liq ma'lumot: {$order_url}\n";
         }
 
-        if ($client) {
-            $sendMessage .= "👤 Buyurtmachi: {$client}\n";
+        if ($client && $client_type) {
+            $sendMessage .= "👤 Buyurtmachi: {$client} ($client_type)\n";
         }
 
         if ($phone) {
