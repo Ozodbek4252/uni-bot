@@ -26,7 +26,6 @@ class QuyoshliBotService implements BotServiceInterface
         $order_url = $data['order_url'] ?? null;
         $client = $data['client'] ?? null;
         $phone = $data['phone'] ?? null;
-        $order_number = $data['order_number'] ?? null;
         $products = $data['products'] ?? null;
         $address = $data['address'] ?? null;
         $file = $data['file'] ?? null;
@@ -52,7 +51,7 @@ class QuyoshliBotService implements BotServiceInterface
         //! Yetkazib berishi turi:
         //! Manzil: Palonchi viloyat, Palonchi tuman , adress va uy raqami
 
-        $sendMessage = "🆔 Номер заказа: {$order_id}\n";
+        $sendMessage = "🆔 Buyurtma raqami: {$order_id}\n";
 
         if ($message) {
             $sendMessage .= "📝 Habar matni: {$message}\n";
@@ -68,10 +67,6 @@ class QuyoshliBotService implements BotServiceInterface
 
         if ($phone) {
             $sendMessage .= "📞 Telefon raqam: {$phone}\n";
-        }
-
-        if ($order_number) {
-            $sendMessage .= "📬 Buyurtma raqami: {$order_number}\n";
         }
 
         if ($products) {
