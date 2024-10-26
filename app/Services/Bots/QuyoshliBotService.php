@@ -76,7 +76,8 @@ class QuyoshliBotService implements BotServiceInterface
                 $sendMessage .= "💵 Buyurtma mahsulotlar va ularning narxlari: \n";
                 foreach ($products as $product) {
                     if (isset($product['name']) && isset($product['price']) && isset($product['count'])) {
-                        $sendMessage .= "📦 Mahsulot: {$product['name']} - {$product['price']} so'm - {$product['count']} ta\n";
+                        $product_price = number_format($product['price'], 0, '.', ' ');
+                        $sendMessage .= "📦 Mahsulot: {$product['name']} - {$product_price} so'm - {$product['count']} ta\n";
                     }
                     $summa += $product['price'] * $product['count'];
                 }
