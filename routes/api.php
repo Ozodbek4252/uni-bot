@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CRMController;
 use App\Http\Controllers\API\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/request-to-bot', [RequestController::class, 'requestToBot']);
 Route::post('/request-to-bot', [RequestController::class, 'requestToBot']);
+
+Route::post('/request-to-crm', [CRMController::class, 'requestToCRM']);
