@@ -15,6 +15,7 @@ class CRMController extends Controller
             $request->validate([
                 'name' => 'required|string',
                 'phone' => 'required|string',
+                'project' => 'required|string',
             ]);
 
             $phone = $this->formatPhone($request->phone);
@@ -39,9 +40,12 @@ class CRMController extends Controller
             return redirect()->back();
         }
 
+        $project = $request->input('project');
+        $project = str_replace(' ', '-', $project);
+
         Cache::put("phone-{$phone}", 300, 300);
 
-        $title = "Заявка с  Xonsaroy сайта";
+        $title = "Заявка с $project";
 
         $name = $request->input('name');
 
